@@ -7,5 +7,5 @@ while IFS= read -r line
 do
   fields=($line)
   id=${fields[1]}
-  pythonsh $AUTODOCKTOOLS_UTIL/summarize_results4.py -b -d $id -a -o summary.txt
+  pythonsh $AUTODOCKTOOLS_UTIL/summarize_results4.py -b -d $id -a -o $id.summary.txt
 done < $1
