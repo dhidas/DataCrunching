@@ -2,7 +2,7 @@ from mpi4py import MPI
 import subprocess
 import uuid
 import os
-
+import time
 
 # Common MPI communication, rank, size
 comm = MPI.COMM_WORLD
@@ -46,13 +46,16 @@ if rank == 0:
             dataout = {'line': get_next_small()}
         comm.send(dataout, dest=datain['rank'])
 
+    time.sleep(5)
     while True:
         datain = comm.recv(source=MPI.ANY_SOURCE)
         if datain['result'] < 0:
             break
         reported[datain['rank']] = 1
-        if sum(reported) < size - 1:
-            dataout = {'line': get_next_small()}
+
+        nextline = get_next_small()
+        if sum(reported) < size - 1 and len(nextline) > 0:
+            dataout = {'line': nextline}
             comm.send(dataout, dest=datain['rank'])
         else:
             dataout = {'line': ''}
@@ -65,25 +68,25 @@ if rank == 0:
         comm.send(dataout, dest=datain['rank'])
 
 else:
-    data = {'rank': rank}
+    data = {'rank': rank, 'result': 0}
     comm.send(data, dest=0)
     while True:
         data = comm.recv(source=0)
         if len(data['line']) == 0:
+            print('done rank', rank)
             break
 
         # Process line
         fname = '/tmp/'+str(uuid.uuid4())
         with open(fname, 'w') as fo:
             fo.write(data['line'] + '\n')
-            print('myline', data['line'])
 
         print(['./smiles_dock.sh', protein, fname, pocket, grid])
         process = subprocess.run(['./smiles_dock.sh', protein, fname, pocket, grid])
         process = subprocess.run(['./summarize.sh', fname])
 
-#        os.remove(fname)
-        data = {'rank': rank, 'result': rank}
+        os.remove(fname)
+        data = {'rank': rank, 'result': 1}
         comm.send(data, dest=0)
 
 
