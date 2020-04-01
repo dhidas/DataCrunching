@@ -3,13 +3,12 @@ import subprocess
 import uuid
 import os
 import time
+import sys
 
 # Common MPI communication, rank, size
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
-
-
 
 protein = '3CLPro_protein'
 smilefile = ''
@@ -17,13 +16,14 @@ pocket = '-10.520,-2.322,-20.631'
 grid = '54,52,60'
 residues = ''
 
+smiles_file_name = sys.argv[1]
 
 # Which jobs have reported finishing at least once
 reported = [0] * size
 
 if rank == 0:
 
-    big_smile_file = open('ena+db-small.can')
+    big_smile_file = open(smiles_file_name)
     smile_lines = big_smile_file.readlines()
     def get_next_large ():
         if len(smile_lines) > 0:
