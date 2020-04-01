@@ -2,6 +2,7 @@
 #
 # - $1 the file with SMILES strings to process
 #
+set -e
 declare -a fields
 while IFS= read -r line
 do

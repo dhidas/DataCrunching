@@ -16,6 +16,7 @@
 # - Done one at a time as OpenBabel might crash attempting this
 #   and if that happens only 1 molecule is lost this way
 #
+set -e
 declare -a fields
 while IFS= read -r line
 do
@@ -26,7 +27,7 @@ do
   then
     continue
   fi
-  mkdir $id
+  mkdir -p $id
   cp $1.pdbqt $id
   if [[ $# -eq 5 ]]
   then
