@@ -20,8 +20,72 @@ pocket can be used to define the box that contains the pocket. From
 Looking at `PLPro_chainA_info.txt` we can find that the following pockets
 could be reasonable targets (by looking at the druggability scores):
 
-- pocket 6
-- pocket 23
+- pocket 3  : Running by Xiaohui Qu (04/04/2020)
+- pocket 4
+- pocket 6  : Running by Dean Hidas  (04/04/2020)
+- pocket 23 : Running By Martin Purschke (04/04/2020)
+
+## Pocket 3
+
+From the sphere positions and radii we given in `PLPro_chainA_pockets.pqr`
+we collect:
+
+| coordinate | min     | radius | max     | radius |
+| ---------- | ------- | ------ | ------- | ------ |
+| x          |  -2.469 | 3.48   |   7.206 | 4.68   |
+| y          |  47.235 | 4.68   |  55.998 | 3.47   |
+| z          | -29.477 | 3.73   | -19.803 | 3.54   |
+
+Compute from the results in the table above the lower and upper limits of 
+the coordinates. The lower limits are calculated by taking the minimum value
+of a coordinate and subtracting the sphere radius. The upper limits are 
+calculated by taking the maximum value of a coordinate and adding the sphere
+radius. The number of points are calculated from the length and using that the
+default grid spacing is 0.375 Angstrom (note that the number of grid points
+has to be even in every dimension). This way we get:
+
+| coordinate | min     | max     | middle   | length | npts |
+| ---------- | ------- | ------- | -------- | ------ | ---- |
+| x          |  -5.949 |  11.886 |   2.968  | 17.835 | 48   |
+| y          |  42.555 |  59.468 |  51.011  | 16.913 | 46   |
+| z          | -33.207 | -16.263 | -24.735  | 16.944 | 46   |
+
+Hence the gridcenter and npts parameters are
+```
+gridcenter="2.968,51.011,-24.735"
+npts="48,46,46"
+```
+
+## Pocket 4
+
+From the sphere positions and radii we given in `PLPro_chainA_pockets.pqr`
+we collect:
+
+| coordinate | min     | radius | max     | radius |
+| ---------- | ------- | ------ | ------- | ------ |
+| x          | -32.954 | 3.87   | -23.281 | 3.86   |
+| y          |  34.167 | 4.00   |  45.273 | 3.62   |
+| z          | -17.089 | 3.57   |  -9.995 | 3.86   |
+
+Compute from the results in the table above the lower and upper limits of 
+the coordinates. The lower limits are calculated by taking the minimum value
+of a coordinate and subtracting the sphere radius. The upper limits are 
+calculated by taking the maximum value of a coordinate and adding the sphere
+radius. The number of points are calculated from the length and using that the
+default grid spacing is 0.375 Angstrom (note that the number of grid points
+has to be even in every dimension). This way we get:
+
+| coordinate | min     | max     | middle   | length | npts |
+| ---------- | ------- | ------- | -------- | ------ | ---- |
+| x          | -36.824 | -19.421 | -28.122  | 17.403 | 48   |
+| y          |  30.167 |  48.893 |  39.530  | 18.726 | 50   |
+| z          | -20.659 |  -6.135 | -13.397  | 14.524 | 40   |
+
+Hence the gridcenter and npts parameters are
+```
+gridcenter="-28.122,39.530,-13.397"
+npts="48,50,40"
+```
 
 ## Pocket 6
 
