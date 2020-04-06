@@ -16,7 +16,6 @@
 # - Done one at a time as OpenBabel might crash attempting this
 #   and if that happens only 1 molecule is lost this way
 #
-set -e
 declare -a fields
 while IFS= read -r line
 do
