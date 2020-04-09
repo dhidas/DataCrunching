@@ -1,5 +1,3 @@
-[![Travis](https://travis-ci.com/2019-ncovgroup/DataCrunching.svg?branch=master)](https://travis-ci.com/github/2019-ncovgroup/DataCrunching)
-
 # DataCrunching
 
 [![Build Status](https://travis-ci.com/2019-ncovgroup/DataCrunching.svg?branch=master)](https://travis-ci.com/2019-ncovgroup/DataCrunching)
