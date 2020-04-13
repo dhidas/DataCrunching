@@ -58,7 +58,7 @@ script:
     set -e
     # Unlimit stack size to avoid autodock crashes.
     ulimit -s unlimited
-    cd ProcessingScripts/
+    cd ProcessingScripts/Autodock
 
     if [ ! -z "$CALC_ENTRY" ]; then
         echo "$CALC_ENTRY" > ena+db-small.can
