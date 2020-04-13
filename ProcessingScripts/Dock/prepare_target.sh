@@ -2,15 +2,15 @@
 #
 # Set the target up for Dock 6.9
 #
-# This script takes 3 argument:
+# This script takes 2 argument:
 #
 # - $1.pdb is the file containing the structure of the protein
-# - $2     is the grid box center  "xcoord,ycoord,zcoord"
-# - $3     is the grid box lengths "xlength,ylength,zlength"
+# - $2.pqr is the file containing the fpocket alpha-spheres
 #
 export MYCWD=`pwd`
-obabel -h -ipdb $1.pdb -omol2 > $1.mol2
-gen_site_box.py "$2" "$3" > site_box.pdb
+obabel -h -ipdb "$1.pdb" -omol2 > "$1.mol2"
+pqr2sph.py "$2.pqr" > "$2.sph"
+gen_site_box.py "$2.pqr"  > site_box.pdb
 cat > grid.in <<EOF
 compute_grids                  yes
 grid_spacing                   0.3
@@ -25,9 +25,9 @@ distance_dielectric            yes
 dielectric_factor              4
 bump_filter                    yes
 bump_overlap                   0.75
-receptor_file                  $MYCWD/$1.mol2
-box_file                       $MYCWD/site_box.pdb
-vdw_definition_file            $DOCK_PREFIX/dock6/parameters/vdw_AMBER_parm99.defn
+receptor_file                  "$MYCWD/$1.mol2"
+box_file                       "$MYCWD/site_box.pdb"
+vdw_definition_file            "$DOCK_PREFIX/dock6/parameters/vdw_AMBER_parm99.defn"
 score_grid_prefix              grid
 EOF
 $DOCK_PREFIX/dock6/bin/grid -i grid.in -v
