@@ -244,7 +244,8 @@ int read_mol2
     if ((molecule->atom[i].subst_id < 0) ||
       (molecule->atom[i].subst_id >= molecule->total.substs))
     {
-      if (molecule->total.substs == 1)
+      if ((molecule->total.substs == 1) ||
+          (molecule->total.substs == 0))
         molecule->atom[i].subst_id = 0;
 
       else
