@@ -28,8 +28,9 @@ do
   fi
   mkdir $id
   cd $id
-  echo "$smiles" | obabel -h --gen3d -ismi -omol2 > $id_obabel.mol2
-  DOCK_PREFIX/dock6/bin/antechamber -ek qm_theory='AM1' -i $id_obabel.mol2 -fi mol2 -o $id.mol2 -fo mol2 -c bcc -j 5 -s 2 -dr n
+  echo "$smiles" | obabel -h --gen3d -ismi -omol2 > ${id}_obabel.mol2
+  $DOCK_HOME/bin/antechamber -i ${id}_obabel.mol2 -fi mol2 -o ${id}.mol2 -fo mol2 -c bcc -j 5 -s 2 
+  #obabel -imol2 ${id}_ac.mol2 -omol2 > ${id}.mol2
   cat > anchor_and_grow.in <<EOF
 conformer_search_type                                        flex
 write_fragment_libraries                                     no
@@ -46,7 +47,7 @@ write_growth_tree                                            no
 use_internal_energy                                          yes
 internal_energy_rep_exp                                      12
 internal_energy_cutoff                                       100.0
-ligand_atom_file                                             $MYCWD/$id.mol2
+ligand_atom_file                                             $MYCWD/$id/$id.mol2
 limit_max_ligands                                            no
 skip_molecule                                                no
 read_mol_solvation                                           no
@@ -54,7 +55,7 @@ calculate_rmsd                                               no
 use_database_filter                                          no
 orient_ligand                                                yes
 automated_matching                                           yes
-receptor_site_file                                           $MYCWD/../$1.sph
+receptor_site_file                                           $MYCWD/$1.sph
 max_orientations                                             500
 critical_points                                              no
 chemical_matching                                            no
@@ -68,7 +69,7 @@ grid_score_secondary                                         no
 grid_score_rep_rad_scale                                     1
 grid_score_vdw_scale                                         1
 grid_score_es_scale                                          1
-grid_score_grid_prefix                                       ../3_grid/grid
+grid_score_grid_prefix                                       ../grid
 multigrid_score_secondary                                    no
 dock3.5_score_secondary                                      no
 continuous_score_secondary                                   no
@@ -95,9 +96,9 @@ simplex_grow_tors_premin_iterations                          0
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 atom_model                                                   all
-vdw_defn_file                                                $DOCK_PREFIX/dock6/parameters/vdw_AMBER_parm99.defn
-flex_defn_file                                               $DOCK_PREFIX/dock6/parameters/flex.defn
-flex_drive_file                                              $DOCK_PREFIX/dock6/parameters/flex_drive.tbl
+vdw_defn_file                                                $DOCK_HOME/parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               $DOCK_HOME/parameters/flex.defn
+flex_drive_file                                              $DOCK_HOME/parameters/flex_drive.tbl
 ligand_outfile_prefix                                        ../${id}_anchor_and_grow
 write_orientations                                           no
 num_scored_conformers                                        1
