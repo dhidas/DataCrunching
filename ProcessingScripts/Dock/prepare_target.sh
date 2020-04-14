@@ -7,10 +7,19 @@
 # - $1.pdb is the file containing the structure of the protein
 # - $2.pqr is the file containing the fpocket alpha-spheres
 #
+if [ ${#0} -gt 17 ]
+then
+  # this command was called with an explicit path
+  path=`dirname $0`
+else
+  # this command is in the PATH
+  path=`which prepare_target.sh`
+  path=`dirname $path`
+fi
 export MYCWD=`pwd`
 obabel -h -ipdb "$1.pdb" -omol2 > "$1.mol2"
-pqr2sph.py "$2.pqr" > "$2.sph"
-gen_site_box.py "$2.pqr"  > site_box.pdb
+$path/pqr2sph.py "$2.pqr" > "$2.sph"
+$path/gen_site_box.py "$2.pqr"  > site_box.pdb
 cat > grid.in <<EOF
 compute_grids                  yes
 grid_spacing                   0.3
@@ -25,9 +34,9 @@ distance_dielectric            yes
 dielectric_factor              4
 bump_filter                    yes
 bump_overlap                   0.75
-receptor_file                  "$MYCWD/$1.mol2"
-box_file                       "$MYCWD/site_box.pdb"
-vdw_definition_file            "$DOCK_PREFIX/dock6/parameters/vdw_AMBER_parm99.defn"
+receptor_file                  $1.mol2
+box_file                       $MYCWD/site_box.pdb
+vdw_definition_file            $DOCK_HOME/parameters/vdw_AMBER_parm99.defn
 score_grid_prefix              grid
 EOF
-$DOCK_PREFIX/dock6/bin/grid -i grid.in -v
+$DOCK_HOME/bin/grid -i grid.in -o grid.out -v
