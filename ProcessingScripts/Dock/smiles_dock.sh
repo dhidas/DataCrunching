@@ -28,8 +28,8 @@ do
   fi
   mkdir $id
   cd $id
-  echo "$smiles" | obabel -h --gen3d -ismi -omol2 > ${id}_obabel.mol2
-  $DOCK_HOME/bin/antechamber -i ${id}_obabel.mol2 -fi mol2 -o ${id}.mol2 -fo mol2 -c bcc -j 5 -s 2 
+  echo "$smiles" | obabel -h --gen3d -ismi -omol2 > ${id}.mol2
+  #$DOCK_HOME/bin/antechamber -i ${id}_obabel.mol2 -fi mol2 -o ${id}.mol2 -fo mol2 -c bcc -j 5 -s 2 
   #obabel -imol2 ${id}_ac.mol2 -omol2 > ${id}.mol2
   cat > anchor_and_grow.in <<EOF
 conformer_search_type                                        flex
