@@ -2,7 +2,7 @@
 #
 # This script takes 4 argument:
 #
-# ?- $1 the protein (in mol2 format)
+# - $1.sph the spheres file (in sph format)
 # - $2 the name of the file containing SMILES strings to process.
 # ?- $3 the pocket center given as "xcoord,ycoord,zcoord"
 # ?- $4 the pocket lengths given as "xlength,ylength,zlength"
@@ -54,7 +54,7 @@ calculate_rmsd                                               no
 use_database_filter                                          no
 orient_ligand                                                yes
 automated_matching                                           yes
-receptor_site_file                                           $MYCWD/../selected_spheres.sph
+receptor_site_file                                           $MYCWD/../$1.sph
 max_orientations                                             500
 critical_points                                              no
 chemical_matching                                            no
