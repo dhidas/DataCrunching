@@ -4,6 +4,10 @@ Running a docking assay with Dock 6.9 proceeds in a number of steps. The
 steps associated with setting up the receptor need to be done only once, 
 whereas the docking steps need to be repeated for every ligand.
 
+Note that Dock 6.9 produces a MOL2 structure as an output. This file
+contains the best docking pose and contains the corresponding docking
+score in the comments.
+
 ## Preparing the receptor
 
 Preparing the receptor (protein-pocket combination) involves a few steps
