@@ -2,7 +2,9 @@
 
 ## Pocket 1
 
-Pocket1: run by Martin Purschke (04/02/2020)
+Pocket 1 is defined by the spheres in `pocket1_vert.pqr`.
+
+Pocket1:
 
      coord-min alpha-rad  coord-max alpha-rad
 x    -15.864   4.56       -4.286    3.67
