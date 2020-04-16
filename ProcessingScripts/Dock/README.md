@@ -81,20 +81,59 @@ EOF
 $DOCK_HOME/bin/grid -i grid.in -o grid.out -v
 ```
 
-## Dock a set of molecule
+## Dock a set of molecules
 
-The protein needs to be converted to the MOL2 format.
+To dock a set of molecules two pieces of information are needed. These pieces
+are the file with spheres as well as the file that contains the SMILES strings
+of the molecules to be docked. The docking is done with the Dock version 
+of the `smiles_dock.sh` script.
+```
+./smiles_dock.sh <pocket> <smiles>
+```
+where `<pocket>` is the file containing the spheres (specified without the .sph 
+extension), the `<smiles>` file is the file containing lines with a SMILES strings
+followed by an identifier. 
 
-The ligand needs to be generated from a SMILES string.
-The charges need to be calculated using Antechamber.
-Save the molecule in MOL2 format.
+Example:
+```
+./smiles_dock.sh pocket1 ena+db-small.can
+```
 
-The pockets are identified by spheres through a program called sphgen.
-Produce a pdb or sph file with the selected spheres.
+Executing this work involves a number of steps given below.
 
-Making the docking grid.
-Showbox generates the grid box.
-Output ix rec_box.pdb listing the 8 corners of the grid box.
-The generation of this information is essentially the same as in Autodock.
-We can just take the center of grid box and the box lengths and construct
-the rec_box.pdb file from that.
+### 1. Convert SMILES string to MOL2
+
+The SMILES string can be converted to a MOL2 file using OpenBabel
+as was done with the Autodock approach.
+```
+echo "$smiles" | obabel -h --gen3d -ismi -omol2 > ${id}.mol2
+```
+The Dock tutorials recommend calculating the charges with the 
+AM1-BCC approach rather then using the Gasteiger charges (that
+OpenBabel would generate). However, Antechamber changes the atom
+type names such that Dock won't recognize them while looking for
+the Lennard-Jones potentials. Hence we stick with Openbabel.
+
+### 2. Dock the molecule
+
+Docking the molecule involves running Dock with a particular input file.
+The `anchor_and_grow.in` input file contains many parameters. Below we
+just give the ones with settings specific to our approach.
+```
+  cat > anchor_and_grow.in <<EOF
+...
+ligand_atom_file                                             $MYCWD/$id/$id.mol2
+...
+receptor_site_file                                           $MYCWD/$1.sph
+...
+grid_score_grid_prefix                                       ../grid
+...
+vdw_defn_file                                                $DOCK_HOME/parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               $DOCK_HOME/parameters/flex.defn
+flex_drive_file                                              $DOCK_HOME/parameters/flex_drive.tbl
+ligand_outfile_prefix                                        ../${id}_anchor_and_grow
+...
+EOF
+  dock6 -i anchor_and_grow.in -o ../${id}_anchor_and_grow.out
+```
+
