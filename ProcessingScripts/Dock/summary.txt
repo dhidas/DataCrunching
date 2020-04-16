@@ -1,0 +1,5 @@
+DB-2133_anchor_and_grow_scored.mol2:##########                          Grid_Score:          -15.079001
+DB-2858_anchor_and_grow_scored.mol2:##########                          Grid_Score:          -15.582770
+DB-3969_anchor_and_grow_scored.mol2:##########                          Grid_Score:          -11.509498
+DB-7596_anchor_and_grow_scored.mol2:##########                          Grid_Score:           -9.513140
+DB-9218_anchor_and_grow_scored.mol2:##########                          Grid_Score:          -12.921422
