@@ -101,10 +101,10 @@ flex_defn_file                                               $DOCK_HOME/paramete
 flex_drive_file                                              $DOCK_HOME/parameters/flex_drive.tbl
 ligand_outfile_prefix                                        ../${id}_anchor_and_grow
 write_orientations                                           no
-num_scored_conformers                                        1
+num_scored_conformers                                        20
 rank_ligands                                                 no
 EOF
   dock6 -i anchor_and_grow.in -o ${id}_anchor_and_grow.out
   cd ..
-  rm -rf ${id}
+  #rm -rf ${id}
 done < $2
