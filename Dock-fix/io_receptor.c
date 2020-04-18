@@ -87,6 +87,7 @@ int read_receptor
 * 10/95 te
 */
   for (i = 0; i < molecule->total.substs; i++)
+  {
     found_substr=(molecule->subst[i].sub_type != NULL);
     if (found_substr) 
     {
@@ -137,11 +138,13 @@ int read_receptor
         exit (fprintf (global.outfile, "Unable to merge substructure %s %d.\n",
           molecule->subst[i].name, i + 1));
     }
+  }
 
 /*
 * Remove caps from atom and subst records
 */
   for (i = molecule->total.substs - 1; i >= 0; i--)
+  {
     found_substr=(molecule->subst[i].sub_type != NULL);
     if (found_substr) 
     {
@@ -164,6 +167,7 @@ int read_receptor
         molecule->subst[j] = molecule->subst[j + 1];
       molecule->total.substs--;
     }
+  }
 
 /*
 * Allocate space for use while shuffling molecular components
