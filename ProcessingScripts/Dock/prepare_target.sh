@@ -17,7 +17,11 @@ else
   path=`dirname $path`
 fi
 export MYCWD=`pwd`
-obabel -h -ipdb "$1.pdb" -omol2 > "$1.mol2"
+obabel -h -ipdb "$1.pdb" -omol2 | sed 's/GASTEIGER/GASTEIGER\n/' > "$1.mol2"
+cat <<EOF >> "$1.mol2"
+@<TRIPOS>SUBSTRUCTURE
+1 molecule PERM 0 **** **** 0 ROOT
+EOF
 $path/pqr2sph.py "$2.pqr" > "$2.sph"
 $path/gen_site_box.py "$2.pqr"  > site_box.pdb
 cat > grid.in <<EOF
