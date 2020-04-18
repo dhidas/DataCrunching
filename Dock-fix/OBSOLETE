@@ -1,0 +1,4 @@
+The fixes in this directory are obsolete. They had side effects with none OpenBabel
+MOL2 files. Instead the script prepare_target.sh for the Dock program has been
+modified to massage the MOL2 file that OpenBabel produces. As a result the grid
+program can now read them.
