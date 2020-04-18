@@ -4,8 +4,8 @@
 #
 # This script takes 2 argument:
 #
-# - $1.pdb is the file containing the structure of the protein
-# - $2.pqr is the file containing the fpocket alpha-spheres
+# - $1.mol2 is the file containing the structure of the protein
+# - $2.pqr  is the file containing the fpocket alpha-spheres
 #
 if [ ${#0} -gt 17 ]
 then
@@ -17,11 +17,14 @@ else
   path=`dirname $path`
 fi
 export MYCWD=`pwd`
-obabel -h -ipdb "$1.pdb" -omol2 | sed 's/GASTEIGER/GASTEIGER\n/' > "$1.mol2"
-cat <<EOF >> "$1.mol2"
-@<TRIPOS>SUBSTRUCTURE
-1 molecule PERM 0 **** **** 0 ROOT
-EOF
+#
+# OpenBabel generates MOL2 files the Dock6's grid program cannot read.
+#
+#obabel -h -ipdb "$1.pdb" -omol2 | sed 's/GASTEIGER/GASTEIGER\n/' > "$1.mol2"
+#cat <<EOF >> "$1.mol2"
+#@<TRIPOS>SUBSTRUCTURE
+#1 molecule PERM 0 **** **** 0 ROOT
+#EOF
 $path/pqr2sph.py "$2.pqr" > "$2.sph"
 $path/gen_site_box.py "$2.pqr"  > site_box.pdb
 cat > grid.in <<EOF
