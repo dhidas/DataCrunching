@@ -35,6 +35,10 @@ do
   then
     continue
   fi
+  if [ -f $prefix$id_anchor_and_grow.out ]
+  then
+    continue
+  fi
   echo $id
   echo $num > /dev/stderr
 done < $1
