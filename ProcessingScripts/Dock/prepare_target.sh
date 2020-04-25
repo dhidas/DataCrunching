@@ -2,10 +2,12 @@
 #
 # Set the target up for Dock 6.9
 #
-# This script takes 2 argument:
+# This script takes 3 argument:
 #
 # - $1.mol2 is the file containing the structure of the protein
 # - $2.pqr  is the file containing the fpocket alpha-spheres
+# - $3      is the size of the buffer around the pocket for
+#           defining the grids
 #
 if [ ${#0} -gt 17 ]
 then
@@ -15,6 +17,11 @@ else
   # this command is in the PATH
   path=`which prepare_target.sh`
   path=`dirname $path`
+fi
+buf=0.0
+if [ $# -eq 3 ]
+then
+  buf=$3
 fi
 export MYCWD=`pwd`
 #
@@ -26,7 +33,7 @@ export MYCWD=`pwd`
 #1 molecule PERM 0 **** **** 0 ROOT
 #EOF
 $path/pqr2sph.py "$2.pqr" > "$2.sph"
-$path/gen_site_box.py "$2.pqr"  > site_box.pdb
+$path/gen_site_box.py "$2.pqr" --buffer "$buf" > site_box.pdb
 cat > grid.in <<EOF
 compute_grids                  yes
 grid_spacing                   0.3

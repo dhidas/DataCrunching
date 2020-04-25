@@ -9,6 +9,6 @@ rm -f  DB-7596_anchor_and_grow_conformers.mol2 DB-7596_anchor_and_grow_scored.mo
 rm -f  DB-9218_anchor_and_grow_conformers.mol2 DB-9218_anchor_and_grow_scored.mol2
 rm -f  summary.txt
 
-./prepare_target.sh 3CLPro_protein pocket1
+./prepare_target.sh 3CLPro_protein pocket1 3.0
 ./smiles_dock.sh pocket1 ena+db-small.can
 ./summarize.sh | tee summary.txt

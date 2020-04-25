@@ -157,12 +157,14 @@ def parse_arguments():
     import argparse
     parser=argparse.ArgumentParser()
     parser.add_argument("filename",help="PQR file to generate grid-box from")
+    parser.add_argument("--buffer",dest="buffer",help="Size of buffer region",default="0.0")
     args=parser.parse_args()
     return args
 
 if __name__ == "__main__":
     args=parse_arguments()
     fobj=open(args.filename,"rb")
+    buf=float(args.buffer)
     contents=fobj.readlines()
     fobj.close()
     t4list=parse_file(contents)
@@ -175,6 +177,15 @@ if __name__ == "__main__":
     leng=find_lengths(t12)
     (xlen,ylen,zlen)=leng
     (ixmin,iymin,izmin,ixmax,iymax,izmax,xmin,ymin,zmin,xmax,ymax,zmax)=t12
+    xlen+=2.0*buf
+    ylen+=2.0*buf
+    zlen+=2.0*buf
+    xmin-=buf
+    ymin-=buf
+    zmin-=buf
+    xmax+=buf
+    ymax+=buf
+    zmax+=buf
     print(f"HEADER    CORNERS OF BOX")
     print(f"REMARK    CENTER (X Y Z)   {xcen:.3f}  {ycen:.3f}  {zcen:.3f}")
     print(f"REMARK    DIMENSIONS (X Y Z)   {xlen:.3f}  {ylen:.3f}  {zlen:.3f}")
