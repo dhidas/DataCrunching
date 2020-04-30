@@ -15,6 +15,16 @@
 # - Done one at a time as OpenBabel might crash attempting this
 #   and if that happens only 1 molecule is lost this way
 #
+if [ ${#0} -gt 14 ]
+then
+  # this command was called with an explicit path
+  path=`readlink -f $0`
+  path=`dirname $path`
+else
+  # this command is in the PATH
+  path=`which smiles_dock.sh`
+  path=`dirname $path`
+fi
 export MYCWD=`pwd`
 declare -a fields
 while IFS= read -r line
@@ -28,7 +38,7 @@ do
   fi
   mkdir $id
   cd $id
-  echo "$smiles" | obabel -h --gen3d -ismi -omol2 > ${id}.mol2
+  $path/echo_smiles.py "$smiles" | obabel -h --gen3d -ismi -omol2 > ${id}.mol2
   #$DOCK_HOME/bin/antechamber -i ${id}_obabel.mol2 -fi mol2 -o ${id}.mol2 -fo mol2 -c bcc -j 5 -s 2 
   #obabel -imol2 ${id}_ac.mol2 -omol2 > ${id}.mol2
   cat > anchor_and_grow.in <<EOF
@@ -106,5 +116,5 @@ rank_ligands                                                 no
 EOF
   dock6 -i anchor_and_grow.in -o ${id}_anchor_and_grow.out
   cd ..
-  rm -rf ${id}
+  #rm -rf ${id}
 done < $2

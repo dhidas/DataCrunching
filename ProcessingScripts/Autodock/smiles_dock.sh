@@ -16,6 +16,16 @@
 # - Done one at a time as OpenBabel might crash attempting this
 #   and if that happens only 1 molecule is lost this way
 #
+if [ ${#0} -gt 14 ]
+then
+  # this command was called with an explicit path
+  path=`readlink -f $0`
+  path=`dirname $path`
+else
+  # this command is in the PATH
+  path=`which smiles_dock.sh`
+  path=`dirname $path`
+fi
 declare -a fields
 while IFS= read -r line
 do
@@ -33,8 +43,8 @@ do
     cp $5.pdb $id
   fi
   cd $id
-  echo "$smiles" | obabel -h --gen3d -ismi -omol2 > $id.mol2
-  pythonsh $AUTODOCKTOOLS_UTIL/prepare_ligand4.py -l $id.mol2 -s -o $id.pdbqt
+  $path/echo_smiles.py "$smiles" | obabel -h --gen3d -ismi -omol2 > $id.mol2
+  pythonsh $AUTODOCKTOOLS_UTIL/prepare_ligand4.py -l $id.mol2 -F -o $id.pdbqt
   if [[ $# -eq 4 ]]
   then
     pythonsh $AUTODOCKTOOLS_UTIL/prepare_gpf4.py  -l $id.pdbqt -r $1.pdbqt -p npts="$4" -p gridcenter="$3" -o $id.gpf
