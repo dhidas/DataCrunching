@@ -18,3 +18,13 @@ If the test fails then the code is now aborted.
 
 To install this fix copy `conf_gen_ag.cpp` to `dock6/src/dock`
 and recompile.
+
+The next issue is that Dock might try to align the ligand with 
+the spheres that define the pocket. To do this the code tries to
+allocate `squared((# spheres)x(# ligand atoms))`, but this dimension
+is stored in an `int` (see line 738 in `orient.cpp`). This
+can generate an overflow causing weird behavior. A test was added
+to avoid the `int` overflow and abort the job with a sensible error
+message.
+
+To install this fix copy `orient.cpp` to `dock6/src/dock`
