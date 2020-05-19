@@ -43,7 +43,7 @@ do
     cp $5.pdb $id
   fi
   cd $id
-  $path/echo_smiles.py "$smiles" | obabel -h --gen3d -ismi -omol2 > $id.mol2
+  $path/echo_smiles.py "$smiles" | obabel -h --gen3d --conformer --nconf 100 --score energy -ismi -omol2 > $id.mol2
   pythonsh $AUTODOCKTOOLS_UTIL/prepare_ligand4.py -l $id.mol2 -F -o $id.pdbqt
   if [[ $# -eq 4 ]]
   then
