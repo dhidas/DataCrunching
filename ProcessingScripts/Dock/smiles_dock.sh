@@ -109,12 +109,22 @@ atom_model                                                   all
 vdw_defn_file                                                $DOCK_HOME/parameters/vdw_AMBER_parm99.defn
 flex_defn_file                                               $DOCK_HOME/parameters/flex.defn
 flex_drive_file                                              $DOCK_HOME/parameters/flex_drive.tbl
-ligand_outfile_prefix                                        ../${id}_anchor_and_grow
+ligand_outfile_prefix                                        ${id}_anchor_and_grow
 write_orientations                                           no
 num_scored_conformers                                        20
 rank_ligands                                                 no
 EOF
   dock6 -i anchor_and_grow.in -o ${id}_anchor_and_grow.out
+  obabel -l 1 -imol2 ${id}_anchor_and_grow_scored.mol2 -osdf | head --lines=-1 > $id.sdf
+  d6_score=`grep "Grid_Score:" ${id}_anchor_and_grow.out | awk '{print $2}'`
+  echo ">  <Dock>"  >> $id.sdf
+  echo $d6_score    >> $id.sdf
+  echo              >> $id.sdf
+  echo ">  <TITLE>" >> $id.sdf
+  echo $id          >> $id.sdf
+  echo              >> $id.sdf
+  echo "\$\$\$\$"   >> $id.sdf
+  mv $id.sdf ..
   cd ..
-  #rm -rf ${id}
+  rm -rf ${id}
 done < $2
