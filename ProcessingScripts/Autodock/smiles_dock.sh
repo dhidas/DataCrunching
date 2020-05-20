@@ -60,5 +60,15 @@ do
   fi
   autogrid4 -p $id.gpf -l $id.glg
   autodock4 -p $id.dpf -l $id.dlg
+  pythonsh $AUTODOCKTOOLS_UTIL/write_lowest_energy_ligand.py -f $id.dlg -o ${id}_tmp.pdbqt
+  obabel -ipdbqt ${id}_tmp.pdbqt -osdf | head --lines=-1 > $id.sdf
+  ad_score=`grep "USER    Estimated Free Energy of Binding    =" $id.dlg | grep -v "DOCKED: USER" | head --lines=1 | awk '{print $8}'`
+  echo ">  <AutodockScore>" >> $id.sdf
+  echo $ad_score            >> $id.sdf
+  echo                      >> $id.sdf
+  echo ">  <TITLE>"         >> $id.sdf
+  echo $id                  >> $id.sdf
+  echo                      >> $id.sdf
+  echo "\$\$\$\$"           >> $id.sdf
   cd ..
 done < $2
