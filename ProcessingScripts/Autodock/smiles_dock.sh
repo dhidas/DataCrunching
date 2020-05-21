@@ -16,6 +16,16 @@
 # - Done one at a time as OpenBabel might crash attempting this
 #   and if that happens only 1 molecule is lost this way
 #
+if [ ${#0} -gt 14 ]
+then
+  # this command was called with an explicit path
+  path=`readlink -f $0`
+  path=`dirname $path`
+else
+  # this command is in the PATH
+  path=`which smiles_dock.sh`
+  path=`dirname $path`
+fi
 declare -a fields
 while IFS= read -r line
 do
@@ -33,8 +43,8 @@ do
     cp $5.pdb $id
   fi
   cd $id
-  echo "$smiles" | obabel -h --gen3d -ismi -omol2 > $id.mol2
-  pythonsh $AUTODOCKTOOLS_UTIL/prepare_ligand4.py -l $id.mol2  -o $id.pdbqt
+  $path/echo_smiles.py "$smiles" | obabel -h --gen3d --conformer --nconf 100 --score energy -ismi -omol2 > $id.mol2
+  pythonsh $AUTODOCKTOOLS_UTIL/prepare_ligand4.py -l $id.mol2 -F -o $id.pdbqt
   if [[ $# -eq 4 ]]
   then
     pythonsh $AUTODOCKTOOLS_UTIL/prepare_gpf4.py  -l $id.pdbqt -r $1.pdbqt -p npts="$4" -p gridcenter="$3" -o $id.gpf
@@ -50,5 +60,15 @@ do
   fi
   autogrid4 -p $id.gpf -l $id.glg
   autodock4 -p $id.dpf -l $id.dlg
+  pythonsh $AUTODOCKTOOLS_UTIL/write_lowest_energy_ligand.py -f $id.dlg -o ${id}_tmp.pdbqt
+  obabel -ipdbqt ${id}_tmp.pdbqt -osdf | head --lines=-1 > $id.sdf
+  ad_score=`grep "USER    Estimated Free Energy of Binding    =" $id.dlg | grep -v "DOCKED: USER" | head --lines=1 | awk '{print $8}'`
+  echo ">  <AutodockScore>" >> $id.sdf
+  echo $ad_score            >> $id.sdf
+  echo                      >> $id.sdf
+  echo ">  <TITLE>"         >> $id.sdf
+  echo $id                  >> $id.sdf
+  echo                      >> $id.sdf
+  echo "\$\$\$\$"           >> $id.sdf
   cd ..
 done < $2
